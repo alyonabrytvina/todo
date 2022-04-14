@@ -1,4 +1,4 @@
-import {types} from '../types/todoTypes';
+import { types } from '../types/todoTypes';
 
 export interface TodoState {
     todos: Todo[]
@@ -10,8 +10,8 @@ export interface Todo {
 }
 
 const initialState: TodoState = {
-    todos: [],
-}
+  todos: [],
+};
 
 export type Action = {
     type: string;
@@ -19,13 +19,12 @@ export type Action = {
 };
 
 export function todoReducer(state = initialState, action: Action) {
-    console.log(action.payload)
-    switch (action.type) {
-        case types.ADD_TODO:
-            return {
-                ...state,
-                todos: action.payload
-            }
-    }
-    return state;
+  switch (action.type) {
+    case types.ADD_TODO:
+      return {
+        ...state,
+        todos: action.payload,
+      };
+  }
+  return state;
 }
