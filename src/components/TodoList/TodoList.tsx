@@ -1,18 +1,26 @@
-import React from "react";
-import {List} from "@mui/material";
-import TodoListItem from "../TodoListItem/TodoListItem";
-import {RootStateOrAny, useSelector} from "react-redux";
-import {Todo} from "../../store/reducers/todoReducer";
+import React from 'react';
+import { List, Paper } from '@mui/material';
+import TodoListItem from '../TodoListItem/TodoListItem';
+import { Todo } from '../../store/reducers/todoReducer';
+import { UseTypedSelector } from '../../hooks/UseTypesSelector';
 
-const TodoList: React.FC = () => {
-    const todosState = useSelector((state: RootStateOrAny) => state.todo.todos);
+export const TodoList: React.FC = () => {
+  const todosState = UseTypedSelector((state) => state.todo.todos);
 
-    return (
-        <List sx={{width: '100%', maxWidth: 360}}>
-            {todosState.map((todo: Todo, index: string) => <TodoListItem key={index} todo={todo} />
-            )}
-        </List>
-    );
-}
-
-export default TodoList;
+  return (
+    <List sx={{
+      width: '80%',
+      height: '600px',
+      overflow: 'scroll',
+      position: 'relative',
+    }}
+    >
+      {Array.isArray(todosState) ? todosState.map((todo: Todo) => (
+        <TodoListItem
+          key={todo.id}
+          todo={todo}
+        />
+      )) : ''}
+    </List>
+  );
+};
