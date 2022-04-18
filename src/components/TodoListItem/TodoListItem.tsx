@@ -1,35 +1,105 @@
 import {
-    Checkbox,
-    ListItem,
-    ListItemButton,
-    ListItemText,
-    ListItemIcon,
-    TextField,
-} from "@mui/material";
-import React from "react";
+  Checkbox,
+  ListItem,
+  ListItemText,
+  ListItemIcon, IconButton, TextField,
+} from '@mui/material';
+import React, { useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {Todo} from "../../store/reducers/todoReducer";
+import EditIcon from '@mui/icons-material/Edit';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import CheckIcon from '@mui/icons-material/Check';
+import { useDispatch } from 'react-redux';
+import { Todo } from '../../store/reducers/todoReducer';
+import {
+  actionCompleteTodo, actionDeleteTodo, actionEditTodo,
+} from '../../store/types/todoTypes';
 
 interface Props {
     todo: Todo
 }
 
-const TodoListItem: React.FC<Props> = ({todo}) => {
-    return (
-        <ListItem
-            disablePadding
-        >
-            <ListItemButton>
-                <ListItemIcon>
-                    <Checkbox
-                        edge="start"
-                    />
-                </ListItemIcon>
-                <ListItemText primary={todo.todo} />
-                <DeleteIcon />
-            </ListItemButton>
-        </ListItem>
-    );
-}
+export const TodoListItem: React.FC<Props> = ({ todo }) => {
+  const dispatch = useDispatch();
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [todoDescription, setTodoDescription] = useState<string>(todo.todo);
+  const [isAttached, setIsAttached] = useState<boolean>(false);
 
-export default TodoListItem;
+  const onRemove = (): void => {
+    const removeItem: Todo = { todo: todo.todo, complete: todo.complete, id: todo.id };
+    dispatch(actionDeleteTodo(removeItem.id));
+  };
+
+  const onToggle = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setIsChecked(event.target.checked);
+    dispatch(actionCompleteTodo({ todo: todo.todo, complete: event.target.checked, id: todo.id }));
+  };
+
+  const onEdit = (): void => {
+    setIsEdit(!isEdit);
+  };
+
+  const onChange = (): void => {
+    setIsEdit(!isEdit);
+    if (todoDescription.length !== 0) {
+      dispatch(actionEditTodo({ todo: todoDescription, complete: todo.complete, id: todo.id }));
+    }
+  };
+
+  return (
+    <ListItem
+      disablePadding
+      sx={{
+        display: 'flex',
+        width: '100%',
+        height: '60px',
+        backgroundColor: '#e8e8e8',
+        padding: '20px',
+        position: isAttached ? 'absolute' : 'static',
+        top: '0',
+      }}
+    >
+      <ListItemIcon>
+        <Checkbox
+          edge="start"
+          onChange={onToggle}
+          color="secondary"
+        />
+      </ListItemIcon>
+      {!isEdit ? (
+        <>
+          <ListItemText
+            primary={todo.todo}
+            sx={{
+              width: '800px',
+              textDecoration: isChecked ? 'line-through' : 'none',
+            }}
+          />
+          <IconButton onClick={onEdit}>
+            <EditIcon color="primary" />
+          </IconButton>
+        </>
+
+      ) : (
+        <>
+          <TextField
+            variant="standard"
+            value={todoDescription}
+            onChange={(e) => setTodoDescription(e.target.value)}
+            sx={{ width: '800px' }}
+          />
+          <IconButton onClick={onChange}>
+            <CheckIcon color="secondary" />
+          </IconButton>
+        </>
+      )}
+      <IconButton onClick={() => setIsAttached(!isAttached)}>
+        <AttachFileIcon color="primary" />
+      </IconButton>
+      <IconButton onClick={onRemove}>
+        <DeleteIcon color="primary" />
+      </IconButton>
+    </ListItem>
+  );
+};

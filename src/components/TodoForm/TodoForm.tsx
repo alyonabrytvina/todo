@@ -1,44 +1,55 @@
 import React, { useState } from 'react';
 import {
+  Box,
   Button,
   FormControl,
-  Paper,
   TextField,
   Typography,
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { actionAddTodo } from '../../store/types/todoTypes';
+import TodoList from '../TodoList/TodoList';
+import { Filters } from '../Filters/Filters';
+import { Header } from '../Header/Header';
 
-const AddTodo: React.FC = () => {
+export const TodoForm: React.FC = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState<string>('');
+
+  const keyPressHandler = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      setValue('');
+      if (value.length !== 0) {
+        dispatch(actionAddTodo({ todo: value, complete: false, id: uuidv4() }));
+      }
+    }
+  };
 
   const addTodo = (): void => {
     setValue('');
 
-    if (value.length) {
+    if (value.length !== 0) {
       dispatch(actionAddTodo({ todo: value, complete: false, id: uuidv4() }));
     }
   };
 
   return (
-    <Paper
-      elevation={10}
-      className="paperStyle"
+    <Box
       sx={{
         display: 'flex',
-        width: '80%',
-        height: '200px',
-        marginTop: '20px',
-        marginBottom: '20px',
-        justifyContent: 'center',
+        width: '100%',
+        height: '100vh',
+        justifyContent: 'start',
         alignItems: 'center',
         flexDirection: 'column',
+        paddingBottom: '50px',
       }}
     >
-      <Typography variant="h2">
-        My todos
+      <Header />
+      <Filters />
+      <Typography variant="h4" sx={{ marginTop: '20px' }}>
+        Create note
       </Typography>
       <FormControl
         variant="standard"
@@ -46,7 +57,6 @@ const AddTodo: React.FC = () => {
           margin: '20px',
           display: 'flex',
           width: '70%',
-          height: '55px',
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'row',
@@ -56,6 +66,7 @@ const AddTodo: React.FC = () => {
           label="What needs to be done?"
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          onKeyPress={keyPressHandler}
         />
         <Button
           variant="contained"
@@ -67,8 +78,7 @@ const AddTodo: React.FC = () => {
           +
         </Button>
       </FormControl>
-    </Paper>
+      <TodoList />
+    </Box>
   );
 };
-
-export default AddTodo;

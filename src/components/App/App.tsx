@@ -1,18 +1,15 @@
-import React from "react";
-import Header from "../Header/Header";
-import TodoList from "../TodoList/TodoList";
-import AddTodo from "../AddTodo/AddTodo";
-import {Provider} from "react-redux";
-import {store} from "../../store/store";
+import React from 'react';
+import { Provider } from 'react-redux';
+import { ThemeProvider } from '@mui/material';
+import TodoForm from '../TodoForm/TodoForm';
+import { store } from '../../store/store';
+import { theme } from '../../assets/theme';
+import './App.scss';
 
-const App: React.FC = () => {
-    return (
-        <Provider store={store}>
-                <Header/>
-                <AddTodo/>
-                <TodoList/>
-        </Provider>
-    );
-}
-
-export default App;
+export const App: React.FC = () => (
+  <ThemeProvider theme={theme}>
+    <Provider store={store}>
+      <TodoForm />
+    </Provider>
+  </ThemeProvider>
+);
