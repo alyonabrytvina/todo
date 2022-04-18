@@ -7,6 +7,7 @@ export interface TodoState {
 export interface Todo {
     todo: string,
     complete: boolean,
+    id: any,
 }
 
 const initialState: TodoState = {
@@ -15,15 +16,21 @@ const initialState: TodoState = {
 
 export type Action = {
     type: string;
-    payload: Todo[]
+    payload: Todo;
 };
 
 export function todoReducer(state = initialState, action: Action) {
+  const todos = state.todos.filter((todo) => todo.id !== action.payload);
   switch (action.type) {
     case types.ADD_TODO:
       return {
         ...state,
-        todos: action.payload,
+        todos: [action.payload, ...state.todos],
+      };
+    case types.DELETE_TODO:
+      return {
+        ...state,
+        todos,
       };
   }
   return state;
