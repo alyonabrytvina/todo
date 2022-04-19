@@ -56,8 +56,7 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
         height: '60px',
         backgroundColor: '#e8e8e8',
         padding: '20px',
-        position: isAttached ? 'absolute' : 'static',
-        top: '0',
+        order: isAttached ? '-2' : '1',
       }}
     >
       <ListItemIcon>
@@ -95,7 +94,7 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
         </>
       )}
       <IconButton onClick={() => setIsAttached(!isAttached)}>
-        <AttachFileIcon color="primary" />
+        <AttachFileIcon color={isAttached ? 'secondary' : 'primary'} />
       </IconButton>
       <IconButton onClick={onRemove}>
         <DeleteIcon color="primary" />
