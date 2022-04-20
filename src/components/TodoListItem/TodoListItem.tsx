@@ -26,14 +26,20 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
   const [todoDescription, setTodoDescription] = useState<string>(todo.todo);
   const [isAttached, setIsAttached] = useState<boolean>(false);
 
+  const isSearching = todo.search;
+
   const onRemove = (): void => {
-    const removeItem: Todo = { todo: todo.todo, complete: todo.complete, id: todo.id };
+    const removeItem: Todo = {
+      todo: todo.todo, complete: todo.complete, id: todo.id, search: todo.search, searchedValue: todo.searchedValue,
+    };
     dispatch(actionDeleteTodo(removeItem.id));
   };
 
   const onToggle = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setIsChecked(event.target.checked);
-    dispatch(actionCompleteTodo({ todo: todo.todo, complete: event.target.checked, id: todo.id }));
+    dispatch(actionCompleteTodo({
+      todo: todo.todo, complete: event.target.checked, id: todo.id, search: todo.search, searchedValue: todo.searchedValue,
+    }));
   };
 
   const onEdit = (): void => {
@@ -43,7 +49,9 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
   const onChange = (): void => {
     setIsEdit(!isEdit);
     if (todoDescription.length !== 0) {
-      dispatch(actionEditTodo({ todo: todoDescription, complete: todo.complete, id: todo.id }));
+      dispatch(actionEditTodo({
+        todo: todoDescription, complete: todo.complete, id: todo.id, search: todo.search, searchedValue: todo.searchedValue,
+      }));
     }
   };
 
@@ -54,7 +62,7 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
         display: 'flex',
         width: '100%',
         height: '60px',
-        backgroundColor: '#e8e8e8',
+        backgroundColor: isSearching ? 'yellow' : '#e8e8e8',
         padding: '20px',
         order: isAttached ? '-2' : '1',
       }}

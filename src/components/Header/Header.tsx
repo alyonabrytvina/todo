@@ -1,49 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  AppBar, InputBase, Toolbar, Typography,
+  AppBar, Toolbar, Typography,
 } from '@mui/material';
-import { alpha, styled } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
+import { useDispatch } from 'react-redux';
+import { UseTypedSelector } from '../../hooks/UseTypesSelector';
+import { Search } from '../Search/Search';
+import { actionSearchTodo } from '../../store/types/todoTypes';
 
 export const Header: React.FC = () => {
-  const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
-  }));
+  const dispatch = useDispatch();
+  const todosState = UseTypedSelector((state) => state.todo.todos);
+  const [searchValue, setSearchValue] = useState<string>('');
 
-  const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }));
+  const handleSearch = (newSearchQuery: string) => {
+    setSearchValue(newSearchQuery);
+  };
 
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-      padding: theme.spacing(1, 1, 1, 0),
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('md')]: {
-        width: '20ch',
-      },
-    },
-  }));
+  useEffect(() => {
+    todosState.forEach((todo) => {
+      if (!!searchValue.length && todo.todo.toLowerCase().includes(searchValue.toLowerCase())) {
+        dispatch(actionSearchTodo({ ...todo, search: true, searchedValue: searchValue }));
+      } else {
+        dispatch(actionSearchTodo({ ...todo, search: false, searchedValue: searchValue }));
+      }
+    });
+  }, [searchValue]);
 
   return (
     <AppBar
@@ -51,6 +32,8 @@ export const Header: React.FC = () => {
       sx={{
         position: 'static',
         width: '100%',
+        display: 'flex',
+        justifyContent: 'spaceBetween',
       }}
     >
       <Toolbar sx={{
@@ -59,18 +42,10 @@ export const Header: React.FC = () => {
         flexDirection: 'row',
       }}
       >
-        <Typography variant="h6" component="div">
+        <Typography variant="h5" component="div">
           List of notes
         </Typography>
-        <Search>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search…"
-            inputProps={{ 'aria-label': 'search' }}
-          />
-        </Search>
+        <Search handleSearch={handleSearch} />
       </Toolbar>
     </AppBar>
   );

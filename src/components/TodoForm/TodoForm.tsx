@@ -9,9 +9,9 @@ import {
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { actionAddTodo } from '../../store/types/todoTypes';
-import TodoList from '../TodoList/TodoList';
 import { Filters } from '../Filters/Filters';
 import { Header } from '../Header/Header';
+import { TodoList } from '../TodoList/TodoList';
 
 export const TodoForm: React.FC = () => {
   const dispatch = useDispatch();
@@ -21,7 +21,9 @@ export const TodoForm: React.FC = () => {
     if (event.key === 'Enter') {
       setValue('');
       if (value.length !== 0) {
-        dispatch(actionAddTodo({ todo: value, complete: false, id: uuidv4() }));
+        dispatch(actionAddTodo({
+          todo: value, complete: false, id: uuidv4(), search: false, searchedValue: '',
+        }));
       }
     }
   };
@@ -30,7 +32,9 @@ export const TodoForm: React.FC = () => {
     setValue('');
 
     if (value.length !== 0) {
-      dispatch(actionAddTodo({ todo: value, complete: false, id: uuidv4() }));
+      dispatch(actionAddTodo({
+        todo: value, complete: false, id: uuidv4(), search: false, searchedValue: '',
+      }));
     }
   };
 

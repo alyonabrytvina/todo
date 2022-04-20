@@ -8,6 +8,8 @@ export interface Todo {
     todo: string,
     complete: boolean,
     id: any,
+    search: boolean,
+  searchedValue: string,
 }
 
 const initialState: TodoState = {
@@ -34,11 +36,17 @@ export function todoReducer(state = initialState, action: ActionTypes): TodoStat
         } : todo)),
       };
     case TodoActionTypes.EDIT_TODO:
-      console.log(action.payload);
       return {
         ...state,
         todos: state.todos.map((todo) => (todo.id === action.payload.id ? {
           ...todo, todo: action.payload.todo,
+        } : todo)),
+      };
+    case TodoActionTypes.SEARCH_TODO:
+      return {
+        ...state,
+        todos: state.todos.map((todo) => (todo.id === action.payload.id ? {
+          ...todo, search: action.payload.search,
         } : todo)),
       };
   }
