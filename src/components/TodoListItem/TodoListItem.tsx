@@ -2,111 +2,145 @@ import {
   Checkbox,
   ListItem,
   ListItemText,
-  ListItemIcon, IconButton, TextField,
+  ListItemIcon, IconButton, TextField, ListItemButton,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CheckIcon from '@mui/icons-material/Check';
 import { useDispatch } from 'react-redux';
-import { Todo } from '../../store/reducers/todoReducer';
+import './TodoListItem.scss';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import Collapse from '@mui/material/Collapse';
+import List from '@mui/material/List';
+import { CreateTag } from '../CreateTag/CreateTag';
 import {
   actionCompleteTodo, actionDeleteTodo, actionEditTodo,
 } from '../../store/types/todoTypes';
+import { Todo } from '../../store/reducers/todoReducer';
 
 interface Props {
-    todo: Todo
+    todoValue: Todo
 }
 
-export const TodoListItem: React.FC<Props> = ({ todo }) => {
+export const TodoListItem: React.FC<Props> = ({ todoValue }) => {
   const dispatch = useDispatch();
-  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(todoValue.completed);
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [todoDescription, setTodoDescription] = useState<string>(todo.todo);
+  const [todoDescription, setTodoDescription] = useState<string>(todoValue.todo);
   const [isAttached, setIsAttached] = useState<boolean>(false);
 
-  const isSearching = todo.search;
+  const [hasTag, setHasTag] = useState<boolean>(false);
+  const [tagName, setTagName] = useState<string>('');
+
+  const [open, setOpen] = useState<boolean>(false);
 
   const onRemove = (): void => {
     const removeItem: Todo = {
-      todo: todo.todo, complete: todo.complete, id: todo.id, search: todo.search, searchedValue: todo.searchedValue,
+      ...todoValue,
     };
     dispatch(actionDeleteTodo(removeItem.id));
   };
 
-  const onToggle = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setIsChecked(event.target.checked);
+  useEffect(() => {
     dispatch(actionCompleteTodo({
-      todo: todo.todo, complete: event.target.checked, id: todo.id, search: todo.search, searchedValue: todo.searchedValue,
+      ...todoValue, completed: isChecked,
     }));
-  };
+  }, [isChecked]);
 
   const onEdit = (): void => {
     setIsEdit(!isEdit);
   };
 
   const onChange = (): void => {
-    setIsEdit(!isEdit);
+    onEdit();
+
     if (todoDescription.length !== 0) {
       dispatch(actionEditTodo({
-        todo: todoDescription, complete: todo.complete, id: todo.id, search: todo.search, searchedValue: todo.searchedValue,
+        ...todoValue, todo: todoDescription,
       }));
     }
   };
 
-  return (
-    <ListItem
-      disablePadding
-      sx={{
-        display: 'flex',
-        width: '100%',
-        height: '60px',
-        backgroundColor: isSearching ? 'yellow' : '#e8e8e8',
-        padding: '20px',
-        order: isAttached ? '-2' : '1',
-      }}
-    >
-      <ListItemIcon>
-        <Checkbox
-          edge="start"
-          onChange={onToggle}
-          color="secondary"
-        />
-      </ListItemIcon>
-      {!isEdit ? (
-        <>
-          <ListItemText
-            primary={todo.todo}
-            sx={{
-              width: '800px',
-              textDecoration: isChecked ? 'line-through' : 'none',
-            }}
-          />
-          <IconButton onClick={onEdit}>
-            <EditIcon color="primary" />
-          </IconButton>
-        </>
+  const handleClick = () => {
+    setOpen(!open);
+  };
 
-      ) : (
-        <>
-          <TextField
-            variant="standard"
-            value={todoDescription}
-            onChange={(e) => setTodoDescription(e.target.value)}
-            sx={{ width: '800px' }}
+  return (
+    <>
+      <ListItem
+        disablePadding
+        className={todoValue.completed ? 'TodoListItem__item--unchecked' : 'TodoListItem__item--checked'}
+        sx={{
+          // display: 'flex',
+          width: '100%',
+          // height: '60px',
+          background: todoValue.searched ? '#FFCC00' : '#e8e8e8',
+          padding: '20px',
+          order: isAttached ? '-2' : '1',
+        }}
+      >
+        <ListItemIcon>
+          <Checkbox
+            checked={isChecked}
+            edge="start"
+            onChange={(e) => setIsChecked(e.target.checked)}
+            color="success"
           />
-          <IconButton onClick={onChange}>
-            <CheckIcon color="secondary" />
-          </IconButton>
-        </>
-      )}
-      <IconButton onClick={() => setIsAttached(!isAttached)}>
-        <AttachFileIcon color={isAttached ? 'secondary' : 'primary'} />
-      </IconButton>
-      <IconButton onClick={onRemove}>
-        <DeleteIcon color="primary" />
-      </IconButton>
-    </ListItem>
+        </ListItemIcon>
+        {!isEdit ? (
+          <>
+            <ListItemText
+              primary={todoValue.todo}
+              sx={{
+                width: '800px',
+                textDecoration: isChecked ? 'line-through' : 'none',
+              }}
+            />
+            <IconButton onClick={onEdit}>
+              <EditIcon color="primary" />
+            </IconButton>
+          </>
+        ) : (
+          <>
+            <TextField
+              variant="standard"
+              value={todoDescription}
+              onChange={(e) => setTodoDescription(e.target.value)}
+              sx={{ width: '800px' }}
+            />
+            <IconButton onClick={onChange}>
+              <CheckIcon color="success" />
+            </IconButton>
+          </>
+        )}
+        <IconButton onClick={() => setIsAttached(!isAttached)}>
+          <AttachFileIcon color={isAttached ? 'success' : 'primary'} />
+        </IconButton>
+        <IconButton onClick={onRemove}>
+          <DeleteIcon color="primary" />
+        </IconButton>
+        <ListItemButton onClick={handleClick}>
+          {open ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+      </ListItem>
+      <Collapse
+        in={open}
+        timeout="auto"
+        unmountOnExit
+        sx={{
+          display: 'flex',
+          justifyContent: 'end',
+        }}
+      >
+        <List component="div" disablePadding>
+          <ListItemButton sx={{ pl: 4 }}>
+            <CreateTag todoValue={todoValue} />
+          </ListItemButton>
+        </List>
+      </Collapse>
+    </>
   );
 };

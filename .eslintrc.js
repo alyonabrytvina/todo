@@ -33,5 +33,7 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'off',
     'max-len': 'off',
+    'react/jsx-no-useless-fragment': 'off',
+    'no-unsafe-optional-chaining': 'off',
   },
 };

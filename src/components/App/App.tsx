@@ -5,6 +5,7 @@ import { store } from '../../store/store';
 import { theme } from '../../assets/theme';
 import './App.scss';
 import { TodoForm } from '../TodoForm/TodoForm';
+import { Tags } from '../Tags/Tags';
 
 export const App: React.FC = () => (
   <ThemeProvider theme={theme}>

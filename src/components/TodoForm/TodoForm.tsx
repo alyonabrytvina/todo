@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import {
   Box,
-  Button,
-  FormControl,
+  Button, CssBaseline,
+  FormControl, InputAdornment,
   TextField,
   Typography,
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { actionAddTodo } from '../../store/types/todoTypes';
-import { Filters } from '../Filters/Filters';
 import { Header } from '../Header/Header';
 import { TodoList } from '../TodoList/TodoList';
+import { Tags } from '../Tags/Tags';
 
 export const TodoForm: React.FC = () => {
   const dispatch = useDispatch();
@@ -19,21 +19,15 @@ export const TodoForm: React.FC = () => {
 
   const keyPressHandler = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      setValue('');
-      if (value.length !== 0) {
-        dispatch(actionAddTodo({
-          todo: value, complete: false, id: uuidv4(), search: false, searchedValue: '',
-        }));
-      }
+      addTodo();
     }
   };
 
-  const addTodo = (): void => {
+  const addTodo = () => {
     setValue('');
-
     if (value.length !== 0) {
       dispatch(actionAddTodo({
-        todo: value, complete: false, id: uuidv4(), search: false, searchedValue: '',
+        todo: value, completed: false, id: uuidv4(), searched: false, searchedValue: '', tags: [],
       }));
     }
   };
@@ -43,46 +37,55 @@ export const TodoForm: React.FC = () => {
       sx={{
         display: 'flex',
         width: '100%',
-        height: '100vh',
-        justifyContent: 'start',
+        justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
         paddingBottom: '50px',
       }}
     >
       <Header />
-      <Filters />
-      <Typography variant="h4" sx={{ marginTop: '20px' }}>
-        Create note
-      </Typography>
+      <Tags />
       <FormControl
         variant="standard"
         sx={{
-          margin: '20px',
+          margin: '100px 20px',
           display: 'flex',
-          width: '70%',
+          width: '80%',
           justifyContent: 'center',
           alignItems: 'center',
-          flexDirection: 'row',
+          flexDirection: 'column',
         }}
       >
+        <Typography variant="h4" sx={{ marginTop: '20px' }}>
+          Create note
+        </Typography>
         <TextField
           label="What needs to be done?"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyPress={keyPressHandler}
-        />
-        <Button
-          variant="contained"
           sx={{
-            height: '55px',
+            margin: '20px 0',
           }}
-          onClick={addTodo}
-        >
-          +
-        </Button>
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Button
+                  variant="contained"
+                  sx={{
+                    width: '30px',
+                    height: '30px',
+                  }}
+                  onClick={addTodo}
+                >
+                  +
+                </Button>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <TodoList />
       </FormControl>
-      <TodoList />
     </Box>
   );
 };

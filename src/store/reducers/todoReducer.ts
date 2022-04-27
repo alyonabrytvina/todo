@@ -1,15 +1,16 @@
 import { ActionTypes, TodoActionTypes } from '../types/todoTypes';
 
 export interface TodoState {
-    todos: Todo[]
+    todos: Todo[],
 }
 
 export interface Todo {
     todo: string,
-    complete: boolean,
+    completed: boolean,
     id: any,
-    search: boolean,
-  searchedValue: string,
+    searched: boolean,
+    searchedValue: string,
+    tags: string[]
 }
 
 const initialState: TodoState = {
@@ -28,11 +29,11 @@ export function todoReducer(state = initialState, action: ActionTypes): TodoStat
         ...state,
         todos: state.todos.filter((todo) => todo.id !== action.payload),
       };
-    case TodoActionTypes.COMPLETE_TODO:
+    case TodoActionTypes.COMPLETED_TODO:
       return {
         ...state,
         todos: state.todos.map((todo) => (todo.id === action.payload.id ? {
-          ...todo, complete: action.payload.complete,
+          ...todo, completed: action.payload.completed,
         } : todo)),
       };
     case TodoActionTypes.EDIT_TODO:
@@ -42,11 +43,19 @@ export function todoReducer(state = initialState, action: ActionTypes): TodoStat
           ...todo, todo: action.payload.todo,
         } : todo)),
       };
-    case TodoActionTypes.SEARCH_TODO:
+    case TodoActionTypes.SEARCHED_TODO:
       return {
         ...state,
         todos: state.todos.map((todo) => (todo.id === action.payload.id ? {
-          ...todo, search: action.payload.search,
+          ...todo, searched: action.payload.searched,
+        } : todo)),
+      };
+    case TodoActionTypes.ADD_TAGS:
+      console.log(state.todos, action.payload.tags);
+      return {
+        ...state,
+        todos: state.todos.map((todo) => (todo.id === action.payload.id ? {
+          ...todo, tags: [...action.payload.tags, ...todo.tags],
         } : todo)),
       };
   }

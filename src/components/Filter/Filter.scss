@@ -1,0 +1,11 @@
+.buttons-container{
+
+  &__isSelected{
+    //background-color: #ffcc00;
+    //color: brown;
+  }
+
+  &__isNotSelected{
+    background-color: lightyellow;
+  }
+}

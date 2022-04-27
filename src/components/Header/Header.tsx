@@ -10,30 +10,33 @@ import { actionSearchTodo } from '../../store/types/todoTypes';
 export const Header: React.FC = () => {
   const dispatch = useDispatch();
   const todosState = UseTypedSelector((state) => state.todo.todos);
-  const [searchValue, setSearchValue] = useState<string>('');
+  const [foundValue, setFoundValue] = useState<string>('');
 
   const handleSearch = (newSearchQuery: string) => {
-    setSearchValue(newSearchQuery);
+    setFoundValue(newSearchQuery);
   };
 
   useEffect(() => {
     todosState.forEach((todo) => {
-      if (!!searchValue.length && todo.todo.toLowerCase().includes(searchValue.toLowerCase())) {
-        dispatch(actionSearchTodo({ ...todo, search: true, searchedValue: searchValue }));
+      const includeSearchedValue = todo.todo.toLowerCase().includes(foundValue.toLowerCase());
+
+      if (!!foundValue.length && includeSearchedValue) {
+        dispatch(actionSearchTodo({ ...todo, searched: true, searchedValue: foundValue }));
       } else {
-        dispatch(actionSearchTodo({ ...todo, search: false, searchedValue: searchValue }));
+        dispatch(actionSearchTodo({ ...todo, searched: false, searchedValue: foundValue }));
       }
     });
-  }, [searchValue]);
+  }, [foundValue]);
 
   return (
     <AppBar
       color="primary"
       sx={{
-        position: 'static',
-        width: '100%',
+        position: 'fixed',
+        width: 'calc(100% - 100px)',
         display: 'flex',
         justifyContent: 'spaceBetween',
+        minHeight: '65px',
       }}
     >
       <Toolbar sx={{
