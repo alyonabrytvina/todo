@@ -4,17 +4,17 @@ import Stack from '@mui/material/Stack';
 import { Drawer, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import { v4 as uuidv4 } from 'uuid';
+import { useDispatch } from 'react-redux';
 import { UseTypedSelector } from '../../hooks/UseTypesSelector';
+import { actionRemoveTag } from '../../store/types/tagTypes';
+import { Todo } from '../../store/reducers/todoReducer';
 
 export const Tags: React.FC = () => {
-  const todosState = UseTypedSelector((state) => state.todo.todos);
+  const dispatch = useDispatch();
+  const tagsState = UseTypedSelector((state) => state.tag.tags);
 
   const handleClick = () => {
     console.info('You clicked the Chip.');
-  };
-
-  const handleDelete = () => {
-    console.info('You clicked the delete icon.');
   };
 
   return (
@@ -36,7 +36,7 @@ export const Tags: React.FC = () => {
         Tags
       </Typography>
       <Divider />
-      {todosState?.map((todo) => todo.tags?.map((tag) => (
+      {tagsState?.map((tag) => (
         <Stack
           direction="row"
           spacing={1}
@@ -48,12 +48,12 @@ export const Tags: React.FC = () => {
           }}
         >
           <Chip
-            label={tag}
+            label={tag.tag}
             onClick={handleClick}
-            onDelete={handleDelete}
+            onDelete={() => dispatch(actionRemoveTag(tag))}
           />
         </Stack>
-      )))}
+      ))}
     </Drawer>
   );
 };

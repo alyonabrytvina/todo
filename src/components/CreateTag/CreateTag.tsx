@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { IconButton, TextField, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { IconButton, TextField } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import { useDispatch } from 'react-redux';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { v4 as uuidv4 } from 'uuid';
-import { actionAddTags } from '../../store/types/todoTypes';
 import { Todo } from '../../store/reducers/todoReducer';
+import { actionAddTag } from '../../store/types/tagTypes';
+import { actionAddTagsId } from '../../store/types/todoTypes';
+import { UseTypedSelector } from '../../hooks/UseTypesSelector';
 
 interface Props {
     todoValue: Todo
@@ -16,21 +18,21 @@ interface Props {
 export const CreateTag: React.FC<Props> = ({ todoValue }) => {
   const dispatch = useDispatch();
   const [hasTag, setHasTag] = useState<boolean>(false);
-  const [tagName, setTagName] = useState<string[]>([]);
+  const [tagName, setTagName] = useState<string>('');
+  const [tagsId, setTagsId] = useState<any[]>([]);
+  const tagsState = UseTypedSelector((state) => state.tag.tags);
 
-  const handleClick = () => {
-    console.info('You clicked the Chip.');
-  };
+  const tags = tagsState.filter((tag) => todoValue.tagsId?.includes(tag.id as any));
 
-  const handleDelete = () => {
-    console.info('You clicked the delete icon.');
-  };
-
-  const onTag = (): void => {
+  const onTag = (id: string): void => {
     setHasTag(!hasTag);
-    console.log(tagName);
-    dispatch(actionAddTags({ ...todoValue, tags: [...tagName] }));
+    setTagsId((tagsId) => [...tagsId, id]);
+    dispatch(actionAddTag({ tag: tagName, id }));
   };
+
+  useEffect(() => {
+    dispatch(actionAddTagsId({ ...todoValue, tagsId }));
+  }, [tagsId]);
 
   return (
     <>
@@ -42,16 +44,10 @@ export const CreateTag: React.FC<Props> = ({ todoValue }) => {
           alignItems: 'center',
         }}
       >
-        {todoValue.tags?.map((tag) => (
+        {tags.map((tag) => (
           <Chip
-            className="tag"
-            key={uuidv4()}
-            label={tag}
-            onClick={handleClick}
-            onDelete={handleDelete}
-            sx={{
-              margin: '5px',
-            }}
+            key={tag.id}
+            label={tag.tag}
           />
         ))}
       </Stack>
@@ -67,9 +63,9 @@ export const CreateTag: React.FC<Props> = ({ todoValue }) => {
               minWidth: '100px',
               marginLeft: '5px',
             }}
-            onChange={(e) => setTagName([e.target.value])}
+            onChange={(e) => setTagName(e.target.value)}
           />
-          <IconButton onClick={onTag}>
+          <IconButton onClick={() => onTag(uuidv4())}>
             <CheckIcon color="success" />
           </IconButton>
         </>

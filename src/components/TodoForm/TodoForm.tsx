@@ -27,7 +27,7 @@ export const TodoForm: React.FC = () => {
     setValue('');
     if (value.length !== 0) {
       dispatch(actionAddTodo({
-        todo: value, completed: false, id: uuidv4(), searched: false, searchedValue: '', tags: [],
+        todo: value, completed: false, id: uuidv4(), searched: false, searchedValue: '', tagsId: [],
       }));
     }
   };

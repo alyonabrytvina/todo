@@ -4,13 +4,17 @@ export interface TodoState {
     todos: Todo[],
 }
 
+export interface TagsId {
+  tagId: string,
+}
+
 export interface Todo {
     todo: string,
     completed: boolean,
     id: any,
     searched: boolean,
     searchedValue: string,
-    tags: string[]
+    tagsId: TagsId[]
 }
 
 const initialState: TodoState = {
@@ -50,12 +54,11 @@ export function todoReducer(state = initialState, action: ActionTypes): TodoStat
           ...todo, searched: action.payload.searched,
         } : todo)),
       };
-    case TodoActionTypes.ADD_TAGS:
-      console.log(state.todos, action.payload.tags);
+    case TodoActionTypes.ADD_TAGS_ID:
       return {
         ...state,
         todos: state.todos.map((todo) => (todo.id === action.payload.id ? {
-          ...todo, tags: [...action.payload.tags, ...todo.tags],
+          ...todo, tagsId: [...action.payload.tagsId],
         } : todo)),
       };
   }
