@@ -12,14 +12,14 @@ interface Props{
 export const Search: React.FC<Props> = ({ handleSearch }) => (
   <OutlinedInput
     className="search"
-    color="secondary"
+    color="success"
     onChange={(e) => handleSearch(e.target.value)}
     placeholder="Search…"
     inputProps={{ 'aria-label': 'search' }}
     endAdornment={(
       <InputAdornment position="end">
         <IconButton>
-          <SearchIcon color="secondary" />
+          <SearchIcon color="success" />
         </IconButton>
       </InputAdornment>
 )}

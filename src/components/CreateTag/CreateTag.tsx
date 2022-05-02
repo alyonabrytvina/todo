@@ -19,15 +19,15 @@ export const CreateTag: React.FC<Props> = ({ todoValue }) => {
   const dispatch = useDispatch();
   const [hasTag, setHasTag] = useState<boolean>(false);
   const [tagName, setTagName] = useState<string>('');
-  const [tagsId, setTagsId] = useState<any[]>([]);
-  const tagsState = UseTypedSelector((state) => state.tag.tags);
 
+  const [tagsId, setTagsId] = useState<any[]>(todoValue.tagsId);
+  const tagsState = UseTypedSelector((state) => state.tag.tags);
   const tags = tagsState.filter((tag) => todoValue.tagsId?.includes(tag.id as any));
 
-  const onTag = (id: string): void => {
+  const onTagClick = (id: string): void => {
     setHasTag(!hasTag);
     setTagsId((tagsId) => [...tagsId, id]);
-    dispatch(actionAddTag({ tag: tagName, id }));
+    dispatch(actionAddTag({ tagDescription: tagName, id }));
   };
 
   useEffect(() => {
@@ -46,8 +46,10 @@ export const CreateTag: React.FC<Props> = ({ todoValue }) => {
       >
         {tags.map((tag) => (
           <Chip
+            variant="outlined"
             key={tag.id}
-            label={tag.tag}
+            label={`#${tag.tagDescription}`}
+            color="success"
           />
         ))}
       </Stack>
@@ -65,7 +67,7 @@ export const CreateTag: React.FC<Props> = ({ todoValue }) => {
             }}
             onChange={(e) => setTagName(e.target.value)}
           />
-          <IconButton onClick={() => onTag(uuidv4())}>
+          <IconButton onClick={() => onTagClick(uuidv4())}>
             <CheckIcon color="success" />
           </IconButton>
         </>

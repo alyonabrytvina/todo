@@ -1,11 +1,6 @@
-.TodoListItem {
+.todoListItem {
 
   &__item--checked {
-    background-color: #cde4e4;
-    color: #0044ff;
-  }
-
-  &__item--unchecked {
     background-color: #ffe0db;
     color: #532E01;
   }

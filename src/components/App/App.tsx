@@ -4,13 +4,14 @@ import { ThemeProvider } from '@mui/material';
 import { store } from '../../store/store';
 import { theme } from '../../assets/theme';
 import './App.scss';
-import { TodoForm } from '../TodoForm/TodoForm';
-import { Tags } from '../Tags/Tags';
+import { Header } from '../Header/Header';
+import { TodoList } from '../TodoList/TodoList';
 
 export const App: React.FC = () => (
   <ThemeProvider theme={theme}>
     <Provider store={store}>
-      <TodoForm />
+      <Header />
+      <TodoList />
     </Provider>
   </ThemeProvider>
 );
