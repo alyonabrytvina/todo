@@ -9,10 +9,11 @@ export interface TagsId {
 }
 
 export interface Todo {
-    todo: string,
-    completed: boolean,
+    todoDescription: string,
+    isCompleted: boolean,
     id: any,
-    searched: boolean,
+    isSearched: boolean,
+    isAttached: boolean,
     searchedValue: string,
     tagsId: TagsId[]
 }
@@ -33,25 +34,25 @@ export function todoReducer(state = initialState, action: ActionTypes): TodoStat
         ...state,
         todos: state.todos.filter((todo) => todo.id !== action.payload),
       };
-    case TodoActionTypes.COMPLETED_TODO:
+    case TodoActionTypes.COMPLETE_TODO:
       return {
         ...state,
         todos: state.todos.map((todo) => (todo.id === action.payload.id ? {
-          ...todo, completed: action.payload.completed,
+          ...todo, isCompleted: action.payload.isCompleted,
         } : todo)),
       };
     case TodoActionTypes.EDIT_TODO:
       return {
         ...state,
         todos: state.todos.map((todo) => (todo.id === action.payload.id ? {
-          ...todo, todo: action.payload.todo,
+          ...todo, todoDescription: action.payload.todoDescription,
         } : todo)),
       };
-    case TodoActionTypes.SEARCHED_TODO:
+    case TodoActionTypes.SEARCH_TODO:
       return {
         ...state,
         todos: state.todos.map((todo) => (todo.id === action.payload.id ? {
-          ...todo, searched: action.payload.searched,
+          ...todo, isSearched: action.payload.isSearched,
         } : todo)),
       };
     case TodoActionTypes.ADD_TAGS_ID:
@@ -59,6 +60,13 @@ export function todoReducer(state = initialState, action: ActionTypes): TodoStat
         ...state,
         todos: state.todos.map((todo) => (todo.id === action.payload.id ? {
           ...todo, tagsId: [...action.payload.tagsId],
+        } : todo)),
+      };
+    case TodoActionTypes.ATTACH_TODO:
+      return {
+        ...state,
+        todos: state.todos.map((todo) => (todo.id === action.payload.id ? {
+          ...todo, isAttached: action.payload.isAttached,
         } : todo)),
       };
   }

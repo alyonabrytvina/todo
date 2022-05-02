@@ -5,7 +5,7 @@ export interface TagsState{
 }
 
 export interface Tag{
-    tag: string,
+    tagDescription: string,
     id: string,
 }
 
