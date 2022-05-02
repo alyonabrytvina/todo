@@ -18,12 +18,14 @@ export const theme = createTheme({
   },
   palette: {
     primary: {
-      light: '#0066ff',
-      main: '#0044ff',
-      contrastText: '#ffcc00',
+      light: '#B39CD0',
+      main: '#845EC2',
+      contrastText: '#FBEAFF',
     },
     secondary: {
-      main: '#ffcc00',
+      main: '#00C9A7',
+      contrastText: '#4D8076',
+
     },
     success: {
       main: '#532E01',
