@@ -10,6 +10,7 @@ import { Todo } from '../../store/reducers/todoReducer';
 import { actionAddTag } from '../../store/types/tagTypes';
 import { actionAddTagsId } from '../../store/types/todoTypes';
 import { UseTypedSelector } from '../../hooks/UseTypesSelector';
+import { Tag } from '../../store/reducers/tagReducer';
 
 interface Props {
     todoValue: Todo
@@ -20,9 +21,10 @@ export const CreateTag: React.FC<Props> = ({ todoValue }) => {
   const [hasTag, setHasTag] = useState<boolean>(false);
   const [tagName, setTagName] = useState<string>('');
 
-  const [tagsId, setTagsId] = useState<any[]>(todoValue.tagsId);
+  const [tagsId, setTagsId] = useState<string[]>(todoValue.tagsId);
+  console.log(todoValue.tagsId, tagsId);
   const tagsState = UseTypedSelector((state) => state.tag.tags);
-  const tags = tagsState.filter((tag) => todoValue.tagsId?.includes(tag.id as any));
+  const tags = tagsState.filter((tag: Tag) => tagsId.includes(tag.id));
 
   const onTagClick = (id: string): void => {
     setHasTag(!hasTag);

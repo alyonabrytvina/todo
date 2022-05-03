@@ -35,7 +35,7 @@ export const TodoListItem: React.FC<Props> = ({ todoValue }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const onRemove = (): void => {
-    dispatch(actionDeleteTodo(todoValue.id));
+    dispatch(actionDeleteTodo({ ...todoValue, id: todoValue.id }));
   };
 
   useEffect(() => {
