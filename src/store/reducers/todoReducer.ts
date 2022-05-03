@@ -4,18 +4,14 @@ export interface TodoState {
     todos: Todo[],
 }
 
-export interface TagsId {
-  tagId: string,
-}
-
 export interface Todo {
     todoDescription: string,
     isCompleted: boolean,
-    id: any,
+    id: string,
     isSearched: boolean,
     isAttached: boolean,
     searchedValue: string,
-    tagsId: TagsId[]
+    tagsId: string[]
 }
 
 const initialState: TodoState = {
@@ -32,7 +28,7 @@ export function todoReducer(state = initialState, action: ActionTypes): TodoStat
     case TodoActionTypes.DELETE_TODO:
       return {
         ...state,
-        todos: state.todos.filter((todo) => todo.id !== action.payload),
+        todos: state.todos.filter((todo) => todo.id !== action.payload.id),
       };
     case TodoActionTypes.COMPLETE_TODO:
       return {
