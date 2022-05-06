@@ -1,4 +1,3 @@
-import { Todo, TodoState } from '../store/reducers/todoReducer';
 import { RootState } from '../store/store';
 
 export const loadState = () => {
@@ -7,6 +6,7 @@ export const loadState = () => {
     if (serializedState === null) {
       return undefined;
     }
+
     return JSON.parse(serializedState);
   } catch (err) {
     return undefined;

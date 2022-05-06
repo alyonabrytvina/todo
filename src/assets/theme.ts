@@ -23,11 +23,6 @@ export const theme = createTheme({
       contrastText: '#FBEAFF',
     },
     secondary: {
-      main: '#00C9A7',
-      contrastText: '#4D8076',
-
-    },
-    success: {
       main: '#532E01',
     },
   },

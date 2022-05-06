@@ -48,7 +48,7 @@ export const TodoListItem: React.FC<Props> = ({ todoValue }) => {
     setIsEdit(!isEdit);
   };
 
-  const keyPressHandler = (event: React.KeyboardEvent) => {
+  const keyDownHandler = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       onChange();
     }
@@ -68,11 +68,11 @@ export const TodoListItem: React.FC<Props> = ({ todoValue }) => {
     <>
       <ListItem
         disablePadding
-        color={todoValue.isCompleted ? 'success' : 'primary'}
+        color={todoValue.isCompleted ? 'secondary' : 'primary'}
         sx={{
-          background: todoValue.isSearched ? '#00C9A7' : '#FBEAFF',
           padding: '20px',
           order: todoValue.isAttached ? '-2' : '1',
+          wordBreak: 'break-all',
         }}
       >
         <ListItemIcon>
@@ -80,15 +80,15 @@ export const TodoListItem: React.FC<Props> = ({ todoValue }) => {
             checked={isChecked}
             edge="start"
             onChange={(e) => setIsChecked(e.target.checked)}
-            color="success"
+            color="secondary"
           />
         </ListItemIcon>
         {!isEdit ? (
           <>
             <ListItemText
               primary={todoValue.todoDescription}
+              className={todoValue.isSearched ? 'todo-item-text__searched' : 'todo-item-text'}
               sx={{
-                width: '800px',
                 textDecoration: todoValue.isCompleted ? 'line-through' : 'none',
               }}
             />
@@ -103,23 +103,23 @@ export const TodoListItem: React.FC<Props> = ({ todoValue }) => {
               value={todoDescription}
               onChange={(e) => setTodoDescription(e.target.value)}
               sx={{ width: '800px' }}
-              onKeyPress={keyPressHandler}
+              onKeyDown={keyDownHandler}
             />
             <IconButton onClick={onChange}>
-              <CheckIcon color="success" />
+              <CheckIcon color="secondary" />
             </IconButton>
           </>
         )}
         <IconButton onClick={() => dispatch(actionAttachTodo({ ...todoValue, isAttached: !todoValue.isAttached }))}>
-          <AttachFileIcon color={todoValue.isAttached ? 'success' : 'primary'} />
+          <AttachFileIcon color={todoValue.isAttached ? 'secondary' : 'primary'} />
         </IconButton>
         <IconButton onClick={onRemove}>
           <DeleteIcon color="primary" />
         </IconButton>
-        <ListItemButton onClick={() => setIsOpen(!isOpen)}>
+        <ListItemButton onClick={() => setIsOpen(!isOpen)} color="secondary">
           {isOpen
-            ? <ExpandLess color="success" />
-            : <ExpandMore color="success" />}
+            ? <ExpandLess />
+            : <ExpandMore />}
         </ListItemButton>
       </ListItem>
       <Collapse

@@ -1,38 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import {
   Drawer, Typography,
 } from '@mui/material';
 import Divider from '@mui/material/Divider';
-import { v4 as uuidv4 } from 'uuid';
 import { useDispatch } from 'react-redux';
-import { createStyles, makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
 import { UseTypedSelector } from '../../hooks/UseTypesSelector';
-import { actionRemoveTag } from '../../store/types/tagTypes';
+import { actionRemoveTag, actionSelectTag } from '../../store/types/tagTypes';
 
-interface Tag {
-    id: string;
-    tagDescription: string;
-}
+const StyledChip = styled(Chip)(({ theme }) => ({
+  '& .MuiChip-label': {
 
-interface Props {
-    handleTag: (tag: Tag) => void,
-}
-
-const useStyles = makeStyles({
-  tag: {
     '&:hover': {
-      color: '#00C9A7',
-      borderColor: '#00C9A7',
+      color: `${theme.palette.primary.main}`,
+      borderColor: `${theme.palette.primary.main}`,
     },
   },
-});
+}));
 
-export const Tags: React.FC<Props> = ({ handleTag }) => {
+export const Tags: React.FC = () => {
   const tagsState = UseTypedSelector((state) => state.tag.tags);
   const dispatch = useDispatch();
-  const classes = useStyles();
+
+  const onTagClick = (id: string, tagDescription: string): void => {
+    tagsState.forEach((tag) => {
+      if (tag.id === id) {
+        dispatch(actionSelectTag({ id, tagDescription, isSelected: !tag.isSelected }));
+      }
+    });
+  };
 
   return (
     <Drawer
@@ -66,12 +64,12 @@ export const Tags: React.FC<Props> = ({ handleTag }) => {
             minWidth: '100px',
           }}
         >
-          <Chip
+          <StyledChip
             label={tag.tagDescription}
-            onClick={() => handleTag({ id: tag.id, tagDescription: tag.tagDescription })}
+            onClick={() => onTagClick(tag.id, tag.tagDescription)}
             onDelete={() => dispatch(actionRemoveTag(tag))}
+            color={tag.isSelected ? 'secondary' : 'primary'}
             variant="outlined"
-            className={classes.tag}
           />
         </Stack>
       ))}

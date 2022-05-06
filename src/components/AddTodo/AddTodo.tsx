@@ -1,21 +1,16 @@
 import {
-  Box,
-  Button, InputAdornment, TextField, Typography,
+  Button, InputAdornment, TextField,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { actionAddTodo } from '../../store/types/todoTypes';
 
-interface Props {
-  handleAdd: (value: boolean) => void,
-}
-
-export const AddTodo: React.FC<Props> = ({ handleAdd }) => {
+export const AddTodo: React.FC = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState<string>('');
 
-  const keyPressHandler = (event: React.KeyboardEvent) => {
+  const keyDownHandler = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       onClickAddTodo();
     }
@@ -23,7 +18,6 @@ export const AddTodo: React.FC<Props> = ({ handleAdd }) => {
 
   const onClickAddTodo = () => {
     setValue('');
-    handleAdd(false);
 
     if (value.length !== 0) {
       dispatch(actionAddTodo({
@@ -31,7 +25,6 @@ export const AddTodo: React.FC<Props> = ({ handleAdd }) => {
         isCompleted: false,
         id: uuidv4(),
         isSearched: false,
-        searchedValue: '',
         isAttached: false,
         tagsId: [],
       }));
@@ -39,44 +32,30 @@ export const AddTodo: React.FC<Props> = ({ handleAdd }) => {
   };
 
   return (
-    <Box
+    <TextField
+      label="What needs to be done?"
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onKeyDown={keyDownHandler}
       sx={{
-        display: 'flex',
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        marginTop: '80px',
+        minWidth: '200px',
       }}
-    >
-      <Typography variant="h5" sx={{ mt: '20px' }}>
-        Create note
-      </Typography>
-      <TextField
-        label="What needs to be done?"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        onKeyPress={keyPressHandler}
-        sx={{
-          margin: '20px 0',
-        }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <Button
-                variant="contained"
-                sx={{
-                  width: '30px',
-                  height: '30px',
-                }}
-                onClick={onClickAddTodo}
-              >
-                +
-              </Button>
-            </InputAdornment>
-          ),
-        }}
-      />
-    </Box>
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <Button
+              variant="contained"
+              sx={{
+                width: '30px',
+                height: '30px',
+              }}
+              onClick={onClickAddTodo}
+            >
+              +
+            </Button>
+          </InputAdornment>
+        ),
+      }}
+    />
   );
 };

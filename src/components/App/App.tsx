@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from '@mui/material';
+import Divider from '@mui/material/Divider';
 import { store } from '../../store/store';
 import { theme } from '../../assets/theme';
 import './App.scss';
@@ -12,6 +13,7 @@ export const App: React.FC = () => (
     <Provider store={store}>
       <Header />
       <TodoList />
+      <Divider />
     </Provider>
   </ThemeProvider>
 );

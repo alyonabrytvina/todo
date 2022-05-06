@@ -35,5 +35,7 @@ module.exports = {
     'max-len': 'off',
     'react/jsx-no-useless-fragment': 'off',
     'no-unsafe-optional-chaining': 'off',
+    'consistent-return': 'off',
+    'array-callback-return': 'off',
   },
 };

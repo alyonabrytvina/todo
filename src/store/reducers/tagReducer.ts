@@ -7,6 +7,7 @@ export interface TagsState{
 export interface Tag{
     tagDescription: string,
     id: string,
+    isSelected: boolean,
 }
 
 const initialState: TagsState = {
@@ -24,6 +25,13 @@ export function tagReducer(state = initialState, action : ActionTypes): TagsStat
       return {
         ...state,
         tags: state.tags.filter((tag) => tag.id !== action.payload.id),
+      };
+    case TagActionTypes.SELECT_TAG:
+      return {
+        ...state,
+        tags: state.tags.map((tag) => (tag.id === action.payload.id ? {
+          ...tag, isSelected: action.payload.isSelected,
+        } : tag)),
       };
   }
   return state;

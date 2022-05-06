@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Box, List, Paper,
 } from '@mui/material';
+import { createSelector } from 'reselect';
 import { Todo } from '../../store/reducers/todoReducer';
 import { UseTypedSelector } from '../../hooks/UseTypesSelector';
 import { TodoListItem } from '../TodoListItem/TodoListItem';
@@ -9,68 +10,52 @@ import './TodoList.scss';
 import { Filter } from '../Filter/Filter';
 import { Tags } from '../Tags/Tags';
 import { AddTodo } from '../AddTodo/AddTodo';
-import { DEFAULT_SET_TIMEOUT } from '../../constants';
+import { RootState } from '../../store/store';
 
-interface Tag {
-    id: string;
-    tagDescription: string;
+enum SET_TIMEOUT { DEFAULT = 500}
+
+enum Options {
+    Active ='active',
+    Completed = 'completed',
+    All = 'all'
 }
 
+const selector = createSelector(
+  (state: RootState) => state.filter.selectedOption,
+  (state: RootState) => state.tag.tags,
+  (state: RootState) => state.todo.todos,
+  (selectedOption, tags, todos) => todos.filter((todo) => {
+    if (selectedOption === Options.Active) {
+      return !todo.isCompleted;
+    } if (selectedOption === Options.Completed) {
+      return todo.isCompleted;
+    } if (selectedOption === Options.All) {
+      return todo;
+    }
+  }).filter((todo) => {
+    const selectedTags = tags.filter((tag) => tag.isSelected).map((tag) => tag.id);
+    if (selectedTags.length) {
+      return selectedTags.find((id) => todo.tagsId.includes(id));
+    }
+    return todo;
+  }),
+);
+
 export const TodoList: React.FC = () => {
-  const todosState = UseTypedSelector((state) => state.todo.todos);
-  const [selectedOption, setSelectedOption] = useState<string>('all');
-
-  const [selectedTag, setSelectedTag] = useState<string>('');
-  const [isTagSelected, setIsTagSelected] = useState(false);
-
-  const [todoByTag, setTodoByTag] = useState<Todo[]>([]);
-  const [todoByFilter, setTodoByFilter] = useState<Todo[]>([]);
-
-  const onClickFilter = (filter: string): void => {
-    setSelectedOption(filter);
-    setIsTagSelected(false);
-  };
-
-  const onClickTag = (tag: Tag): void => {
-    setSelectedTag(tag.id);
-    setIsTagSelected(true);
-  };
-
-  const onAdd = (value: boolean): void => {
-    setIsTagSelected(value);
-  };
+  const todosState = UseTypedSelector(selector);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    const filtered = () => new Promise<Todo[]>((resolve, reject) => {
-      setTimeout(() => resolve(
-        todosState.filter((todo) => {
-          switch (selectedOption) {
-            case 'active':
-              return !todo.isCompleted;
-            case 'completed':
-              return todo.isCompleted;
-            case 'all':
-            default:
-              return todo;
-          }
-        }),
-      ), Math.random() * DEFAULT_SET_TIMEOUT);
-    });
+    const timer = setTimeout(() => setTodos(todosState), SET_TIMEOUT.DEFAULT);
+    return () => clearTimeout(timer);
+  }, [todosState]);
 
-    filtered().then((data) => {
-      setTodoByFilter(data);
-    });
-
-    const findTag = () => new Promise<Todo[]>((resolve) => {
-      setTimeout(() => resolve(
-        todosState.filter((todo) => todo.tagsId.includes(selectedTag as any)),
-      ), Math.random() * DEFAULT_SET_TIMEOUT);
-    });
-
-    findTag().then((data) => {
-      setTodoByTag(data);
-    });
-  }, [todosState, selectedOption, selectedTag]);
+  // function delay() {
+  //   const filtered = () => new Promise<Todo[]>((resolve, reject) => {
+  //     setTimeout(() => resolve(todosState), SET_TIMEOUT.DEFAULT);
+  //   });
+  //   filtered().then((data) => setTodos(data));
+  // }
 
   return (
     <Box sx={{
@@ -81,13 +66,19 @@ export const TodoList: React.FC = () => {
       margin: ' 0 50px 100px 150px',
     }}
     >
-      <Tags handleTag={onClickTag} />
-      <AddTodo handleAdd={onAdd} />
-      <Filter
-        handleClick={onClickFilter}
-        todosState={todosState}
-        selectedOption={selectedOption}
-      />
+      <Tags />
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: '100px',
+        width: '100%',
+        padding: '20px 10px',
+      }}
+      >
+        <AddTodo />
+        <Filter />
+      </Box>
       <Paper
         elevation={10}
         id="paper"
@@ -101,21 +92,15 @@ export const TodoList: React.FC = () => {
             position: 'relative',
             display: 'flex',
             flexDirection: 'column',
-            padding: '10px',
+            padding: '20px',
           }}
         >
-          {isTagSelected ? todoByTag.map((todo: Todo) => (
+          {todos.map((todo: Todo) => (
             <TodoListItem
               key={todo.id}
               todoValue={todo}
             />
-          ))
-            : todoByFilter.map((todo: Todo) => (
-              <TodoListItem
-                key={todo.id}
-                todoValue={todo}
-              />
-            ))}
+          ))}
         </List>
       </Paper>
     </Box>

@@ -18,12 +18,12 @@ export const Header: React.FC = () => {
 
   useEffect(() => {
     todosState.forEach((todo) => {
-      const includeSearchedValue = todo.todoDescription.toLowerCase().includes(foundValue.toLowerCase());
+      const includeSearchedValue = todo.todoDescription?.toLowerCase().includes(foundValue.toLowerCase());
 
       if (!!foundValue.length && includeSearchedValue) {
-        dispatch(actionSearchTodo({ ...todo, isSearched: true, searchedValue: foundValue }));
+        dispatch(actionSearchTodo({ ...todo, isSearched: true }));
       } else {
-        dispatch(actionSearchTodo({ ...todo, isSearched: false, searchedValue: foundValue }));
+        dispatch(actionSearchTodo({ ...todo, isSearched: false }));
       }
     });
   }, [foundValue]);

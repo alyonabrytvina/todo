@@ -10,8 +10,7 @@ export interface Todo {
     id: string,
     isSearched: boolean,
     isAttached: boolean,
-    searchedValue: string,
-    tagsId: string[]
+    tagsId: string[],
 }
 
 const initialState: TodoState = {
@@ -55,7 +54,7 @@ export function todoReducer(state = initialState, action: ActionTypes): TodoStat
       return {
         ...state,
         todos: state.todos.map((todo) => (todo.id === action.payload.id ? {
-          ...todo, tagsId: [...action.payload.tagsId],
+          ...todo, tagsId: action.payload.tagsId,
         } : todo)),
       };
     case TodoActionTypes.ATTACH_TODO:
@@ -64,6 +63,11 @@ export function todoReducer(state = initialState, action: ActionTypes): TodoStat
         todos: state.todos.map((todo) => (todo.id === action.payload.id ? {
           ...todo, isAttached: action.payload.isAttached,
         } : todo)),
+      };
+    case TodoActionTypes.DELETE_ALL_TODOS:
+      return {
+        ...state,
+        todos: [],
       };
   }
   return state;

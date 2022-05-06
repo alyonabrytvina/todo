@@ -22,19 +22,24 @@ export const CreateTag: React.FC<Props> = ({ todoValue }) => {
   const [tagName, setTagName] = useState<string>('');
 
   const [tagsId, setTagsId] = useState<string[]>(todoValue.tagsId);
-  console.log(todoValue.tagsId, tagsId);
   const tagsState = UseTypedSelector((state) => state.tag.tags);
   const tags = tagsState.filter((tag: Tag) => tagsId.includes(tag.id));
 
   const onTagClick = (id: string): void => {
     setHasTag(!hasTag);
     setTagsId((tagsId) => [...tagsId, id]);
-    dispatch(actionAddTag({ tagDescription: tagName, id }));
+    dispatch(actionAddTag({ tagDescription: tagName, id, isSelected: false }));
   };
 
   useEffect(() => {
     dispatch(actionAddTagsId({ ...todoValue, tagsId }));
   }, [tagsId]);
+
+  const keyDownHandler = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      onTagClick(uuidv4());
+    }
+  };
 
   return (
     <>
@@ -51,7 +56,9 @@ export const CreateTag: React.FC<Props> = ({ todoValue }) => {
             variant="outlined"
             key={tag.id}
             label={`#${tag.tagDescription}`}
-            color="success"
+            sx={{
+              cursor: 'pointer',
+            }}
           />
         ))}
       </Stack>
@@ -63,14 +70,14 @@ export const CreateTag: React.FC<Props> = ({ todoValue }) => {
         <>
           <TextField
             variant="standard"
+            onKeyDown={keyDownHandler}
             sx={{
-              minWidth: '100px',
               marginLeft: '5px',
             }}
             onChange={(e) => setTagName(e.target.value)}
           />
           <IconButton onClick={() => onTagClick(uuidv4())}>
-            <CheckIcon color="success" />
+            <CheckIcon color="secondary" />
           </IconButton>
         </>
       )}
