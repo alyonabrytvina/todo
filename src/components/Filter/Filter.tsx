@@ -2,10 +2,10 @@ import React from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { styled } from '@mui/material/styles';
-import './Filter.scss';
 import { useDispatch } from 'react-redux';
 import { actionSetSelectedFilter } from '../../store/types/filterTypes';
-import { UseTypedSelector } from '../../hooks/UseTypesSelector';
+import { UseTypedSelector } from '../../hooks/UseTypedSelector';
+import { FilterState, Options } from '../../store/reducers/filterReducer';
 
 export const Filter: React.FC = () => {
   const dispatch = useDispatch();
@@ -37,6 +37,8 @@ export const Filter: React.FC = () => {
     },
   }));
 
+  const onDispatch = (payload: FilterState) => dispatch(actionSetSelectedFilter(payload));
+
   return (
     <StyledToggleButtonGroup
       size="medium"
@@ -46,22 +48,19 @@ export const Filter: React.FC = () => {
       value={filterState}
     >
       <ToggleButton
-        className={filterState === 'all' ? 'buttons-container__isSelected' : 'buttons-container__isNotSelected'}
-        onClick={() => dispatch(actionSetSelectedFilter({ selectedOption: 'all' }))}
+        onClick={() => onDispatch({ selectedOption: Options.All })}
         value="all"
       >
         {`All (${todosState.length})`}
       </ToggleButton>
       <ToggleButton
-        className={filterState === 'completed' ? 'buttons-container__isSelected' : 'buttons-container__isNotSelected'}
-        onClick={() => dispatch(actionSetSelectedFilter({ selectedOption: 'completed' }))}
+        onClick={() => onDispatch({ selectedOption: Options.Completed })}
         value="completed"
       >
         {`Completed (${completedTodos.length})`}
       </ToggleButton>
       <ToggleButton
-        className={filterState === 'active' ? 'buttons-container__isSelected' : 'buttons-container__isNotSelected'}
-        onClick={() => dispatch(actionSetSelectedFilter({ selectedOption: 'active' }))}
+        onClick={() => onDispatch({ selectedOption: Options.Active })}
         value="active"
       >
         {`Active (${isNotCompletedTodos.length})`}

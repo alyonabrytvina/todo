@@ -9,6 +9,7 @@ export enum TodoActionTypes {
     ADD_TAGS_ID = 'ADD_TAGS_ID',
     ATTACH_TODO = 'ATTACH_TODO',
     DELETE_ALL_TODOS = 'DELETE_ALL_TODOS',
+    DELETE_COMPLETED_TODOS = 'DELETE_COMPLETED_TODOS',
 }
 
 export const actionAddTodo = (payload: Todo) => ({ type: TodoActionTypes.ADD_TODO, payload });
@@ -18,13 +19,17 @@ export const actionCompleteTodo = (payload: Todo) => ({ type: TodoActionTypes.CO
 export const actionSearchTodo = (payload: Todo) => ({ type: TodoActionTypes.SEARCH_TODO, payload });
 export const actionAddTagsId = (payload: Todo) => ({ type: TodoActionTypes.ADD_TAGS_ID, payload });
 export const actionAttachTodo = (payload: Todo) => ({ type: TodoActionTypes.ATTACH_TODO, payload });
-export const actionDeleteALlTodos = (payload: Todo) => ({ type: TodoActionTypes.DELETE_ALL_TODOS, payload });
+export const actionDeleteAllTodos = (payload: Todo[]) => ({ type: TodoActionTypes.DELETE_ALL_TODOS, payload });
+export const actionDeleteCompletedTodos = (payload: void) => ({ type: TodoActionTypes.DELETE_COMPLETED_TODOS, payload });
 
-export type ActionTypes = ReturnType<typeof actionAddTodo> |
+export type TodosActions = ReturnType<typeof actionAddTodo> |
     ReturnType<typeof actionDeleteTodo> |
     ReturnType<typeof actionEditTodo> |
     ReturnType<typeof actionCompleteTodo> |
     ReturnType<typeof actionSearchTodo> |
     ReturnType<typeof actionAddTagsId> |
-    ReturnType<typeof actionAttachTodo> |
-    ReturnType<typeof actionDeleteALlTodos>
+    ReturnType<typeof actionAttachTodo>
+//
+// export type TodosActionsF = ReturnType<typeof actionAddTodo> |
+//     ReturnType<typeof actionDeleteAllTodos> |
+//     ReturnType<typeof actionDeleteCompletedTodos>;

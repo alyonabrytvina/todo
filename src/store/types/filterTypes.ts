@@ -6,5 +6,4 @@ export enum FilterActionTypes {
 
 export const actionSetSelectedFilter = (payload: FilterState) => ({ type: FilterActionTypes.SET_SELECTED_FILTER, payload });
 
-export type ActionTypes =
-    ReturnType<typeof actionSetSelectedFilter>
+export type FilterActions = ReturnType<typeof actionSetSelectedFilter>

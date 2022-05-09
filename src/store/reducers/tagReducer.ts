@@ -1,4 +1,4 @@
-import { ActionTypes, TagActionTypes } from '../types/tagTypes';
+import { TagActions, TagActionTypes } from '../types/tagTypes';
 
 export interface TagsState{
     tags: Tag[]
@@ -14,7 +14,14 @@ const initialState: TagsState = {
   tags: [],
 };
 
-export function tagReducer(state = initialState, action : ActionTypes): TagsState {
+export function tagReducer(state = initialState, action : TagActions): TagsState {
+  if (Array.isArray(action.payload)) {
+    return {
+      ...state,
+      tags: action.payload,
+    };
+  }
+
   switch (action.type) {
     case TagActionTypes.ADD_TAG:
       return {

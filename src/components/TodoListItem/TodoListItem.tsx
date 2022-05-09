@@ -64,6 +64,14 @@ export const TodoListItem: React.FC<Props> = ({ todoValue }) => {
     }
   };
 
+  const onCLickOpen = () => setIsOpen(!isOpen);
+
+  const onChangeTodoDescription = (e: React.ChangeEvent<HTMLInputElement>) => setTodoDescription(e.target.value);
+
+  const onChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => setIsChecked(e.target.checked);
+
+  const onCLickDispatch = () => dispatch(actionAttachTodo({ ...todoValue, isAttached: !todoValue.isAttached }));
+
   return (
     <>
       <ListItem
@@ -79,7 +87,7 @@ export const TodoListItem: React.FC<Props> = ({ todoValue }) => {
           <Checkbox
             checked={isChecked}
             edge="start"
-            onChange={(e) => setIsChecked(e.target.checked)}
+            onChange={onChangeCheckbox}
             color="secondary"
           />
         </ListItemIcon>
@@ -89,6 +97,7 @@ export const TodoListItem: React.FC<Props> = ({ todoValue }) => {
               primary={todoValue.todoDescription}
               className={todoValue.isSearched ? 'todo-item-text__searched' : 'todo-item-text'}
               sx={{
+                width: '100%',
                 textDecoration: todoValue.isCompleted ? 'line-through' : 'none',
               }}
             />
@@ -101,8 +110,8 @@ export const TodoListItem: React.FC<Props> = ({ todoValue }) => {
             <TextField
               variant="standard"
               value={todoDescription}
-              onChange={(e) => setTodoDescription(e.target.value)}
-              sx={{ width: '800px' }}
+              onChange={onChangeTodoDescription}
+              sx={{ width: '100%' }}
               onKeyDown={keyDownHandler}
             />
             <IconButton onClick={onChange}>
@@ -110,16 +119,16 @@ export const TodoListItem: React.FC<Props> = ({ todoValue }) => {
             </IconButton>
           </>
         )}
-        <IconButton onClick={() => dispatch(actionAttachTodo({ ...todoValue, isAttached: !todoValue.isAttached }))}>
+        <IconButton onClick={onCLickDispatch}>
           <AttachFileIcon color={todoValue.isAttached ? 'secondary' : 'primary'} />
         </IconButton>
         <IconButton onClick={onRemove}>
           <DeleteIcon color="primary" />
         </IconButton>
-        <ListItemButton onClick={() => setIsOpen(!isOpen)} color="secondary">
+        <ListItemButton onClick={onCLickOpen}>
           {isOpen
-            ? <ExpandLess />
-            : <ExpandMore />}
+            ? <ExpandLess color="primary" />
+            : <ExpandMore color="secondary" />}
         </ListItemButton>
       </ListItem>
       <Collapse
@@ -127,8 +136,6 @@ export const TodoListItem: React.FC<Props> = ({ todoValue }) => {
         timeout="auto"
         unmountOnExit
         sx={{
-          display: 'flex',
-          justifyContent: 'end',
           order: todoValue.isAttached ? '-2' : '1',
         }}
       >

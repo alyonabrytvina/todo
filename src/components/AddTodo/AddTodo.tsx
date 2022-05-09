@@ -12,14 +12,16 @@ export const AddTodo: React.FC = () => {
 
   const keyDownHandler = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      onClickAddTodo();
+      onClickDispatchTodo();
     }
   };
 
-  const onClickAddTodo = () => {
+  const onAdd = (e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value);
+
+  const onClickDispatchTodo = () => {
     setValue('');
 
-    if (value.length !== 0) {
+    if (!!value) {
       dispatch(actionAddTodo({
         todoDescription: value,
         isCompleted: false,
@@ -35,7 +37,7 @@ export const AddTodo: React.FC = () => {
     <TextField
       label="What needs to be done?"
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={onAdd}
       onKeyDown={keyDownHandler}
       sx={{
         minWidth: '200px',
@@ -49,7 +51,7 @@ export const AddTodo: React.FC = () => {
                 width: '30px',
                 height: '30px',
               }}
-              onClick={onClickAddTodo}
+              onClick={onClickDispatchTodo}
             >
               +
             </Button>

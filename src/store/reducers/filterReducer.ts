@@ -1,15 +1,20 @@
-import { TagsState } from './tagReducer';
-import { ActionTypes, FilterActionTypes } from '../types/filterTypes';
+import { FilterActions, FilterActionTypes } from '../types/filterTypes';
+
+export enum Options {
+  Active ='active',
+  Completed = 'completed',
+  All = 'all'
+}
 
 const initialState = {
-  selectedOption: 'all',
+  selectedOption: Options.All as string,
 };
 
 export interface FilterState{
   selectedOption: string,
 }
 
-export function filterReducer(state = initialState, action : ActionTypes) {
+export function filterReducer(state = initialState, action : FilterActions) {
   switch (action.type) {
     case FilterActionTypes.SET_SELECTED_FILTER:
       return {

@@ -37,5 +37,6 @@ module.exports = {
     'no-unsafe-optional-chaining': 'off',
     'consistent-return': 'off',
     'array-callback-return': 'off',
+    'no-extra-boolean-cast': 'off',
   },
 };

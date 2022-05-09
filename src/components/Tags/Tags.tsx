@@ -6,23 +6,12 @@ import {
 } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import { useDispatch } from 'react-redux';
-import { styled } from '@mui/material/styles';
-import { UseTypedSelector } from '../../hooks/UseTypesSelector';
+import { UseTypedSelector } from '../../hooks/UseTypedSelector';
 import { actionRemoveTag, actionSelectTag } from '../../store/types/tagTypes';
 
-const StyledChip = styled(Chip)(({ theme }) => ({
-  '& .MuiChip-label': {
-
-    '&:hover': {
-      color: `${theme.palette.primary.main}`,
-      borderColor: `${theme.palette.primary.main}`,
-    },
-  },
-}));
-
 export const Tags: React.FC = () => {
-  const tagsState = UseTypedSelector((state) => state.tag.tags);
   const dispatch = useDispatch();
+  const tagsState = UseTypedSelector((state) => state.tag.tags);
 
   const onTagClick = (id: string, tagDescription: string): void => {
     tagsState.forEach((tag) => {
@@ -57,18 +46,22 @@ export const Tags: React.FC = () => {
           spacing={1}
           key={tag.id}
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            margin: '5px',
+            m: '5px',
             maxWidth: '100px',
             minWidth: '100px',
           }}
         >
-          <StyledChip
+          <Chip
             label={tag.tagDescription}
             onClick={() => onTagClick(tag.id, tag.tagDescription)}
             onDelete={() => dispatch(actionRemoveTag(tag))}
             color={tag.isSelected ? 'secondary' : 'primary'}
+            sx={{
+              '&:hover': {
+                color: (theme) => `${theme.palette.primary.main}`,
+                borderColor: (theme) => `${theme.palette.primary.main}`,
+              },
+            }}
             variant="outlined"
           />
         </Stack>

@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Todo } from '../../store/reducers/todoReducer';
 import { actionAddTag } from '../../store/types/tagTypes';
 import { actionAddTagsId } from '../../store/types/todoTypes';
-import { UseTypedSelector } from '../../hooks/UseTypesSelector';
+import { UseTypedSelector } from '../../hooks/UseTypedSelector';
 import { Tag } from '../../store/reducers/tagReducer';
 
 interface Props {
@@ -18,15 +18,15 @@ interface Props {
 
 export const CreateTag: React.FC<Props> = ({ todoValue }) => {
   const dispatch = useDispatch();
-  const [hasTag, setHasTag] = useState<boolean>(false);
+
+  const [isTagAdded, setIsTagAdded] = useState<boolean>(false);
   const [tagName, setTagName] = useState<string>('');
 
   const [tagsId, setTagsId] = useState<string[]>(todoValue.tagsId);
-  const tagsState = UseTypedSelector((state) => state.tag.tags);
-  const tags = tagsState.filter((tag: Tag) => tagsId.includes(tag.id));
+  const tags = UseTypedSelector((state) => state.tag.tags.filter((tag: Tag) => tagsId.includes(tag.id)));
 
   const onTagClick = (id: string): void => {
-    setHasTag(!hasTag);
+    setIsTagAdded(!isTagAdded);
     setTagsId((tagsId) => [...tagsId, id]);
     dispatch(actionAddTag({ tagDescription: tagName, id, isSelected: false }));
   };
@@ -41,6 +41,9 @@ export const CreateTag: React.FC<Props> = ({ todoValue }) => {
     }
   };
 
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => setTagName(e.target.value);
+  const onClickCreateTag = () => setIsTagAdded(!isTagAdded);
+
   return (
     <>
       <Stack
@@ -53,6 +56,7 @@ export const CreateTag: React.FC<Props> = ({ todoValue }) => {
       >
         {tags.map((tag) => (
           <Chip
+            color="primary"
             variant="outlined"
             key={tag.id}
             label={`#${tag.tagDescription}`}
@@ -62,8 +66,8 @@ export const CreateTag: React.FC<Props> = ({ todoValue }) => {
           />
         ))}
       </Stack>
-      {!hasTag ? (
-        <IconButton onClick={() => setHasTag(!hasTag)}>
+      {!isTagAdded ? (
+        <IconButton onClick={onClickCreateTag}>
           <AddCircleIcon fontSize="medium" color="primary" />
         </IconButton>
       ) : (
@@ -74,7 +78,7 @@ export const CreateTag: React.FC<Props> = ({ todoValue }) => {
             sx={{
               marginLeft: '5px',
             }}
-            onChange={(e) => setTagName(e.target.value)}
+            onChange={onChange}
           />
           <IconButton onClick={() => onTagClick(uuidv4())}>
             <CheckIcon color="secondary" />

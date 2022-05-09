@@ -3,7 +3,7 @@ import {
   AppBar, Toolbar, Typography,
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { UseTypedSelector } from '../../hooks/UseTypesSelector';
+import { UseTypedSelector } from '../../hooks/UseTypedSelector';
 import { Search } from '../Search/Search';
 import { actionSearchTodo } from '../../store/types/todoTypes';
 
@@ -19,12 +19,7 @@ export const Header: React.FC = () => {
   useEffect(() => {
     todosState.forEach((todo) => {
       const includeSearchedValue = todo.todoDescription?.toLowerCase().includes(foundValue.toLowerCase());
-
-      if (!!foundValue.length && includeSearchedValue) {
-        dispatch(actionSearchTodo({ ...todo, isSearched: true }));
-      } else {
-        dispatch(actionSearchTodo({ ...todo, isSearched: false }));
-      }
+      dispatch(actionSearchTodo({ ...todo, isSearched: !!foundValue.length && includeSearchedValue }));
     });
   }, [foundValue]);
 

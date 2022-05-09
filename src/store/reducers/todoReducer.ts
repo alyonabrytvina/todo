@@ -1,4 +1,4 @@
-import { ActionTypes, TodoActionTypes } from '../types/todoTypes';
+import { TodoActionTypes, TodosActions } from '../types/todoTypes';
 
 export interface TodoState {
     todos: Todo[],
@@ -17,7 +17,14 @@ const initialState: TodoState = {
   todos: [],
 };
 
-export function todoReducer(state = initialState, action: ActionTypes): TodoState {
+export function todoReducer(state = initialState, action: TodosActions): TodoState {
+  if (Array.isArray(action.payload)) {
+    return {
+      ...state,
+      todos: action.payload,
+    };
+  }
+
   switch (action.type) {
     case TodoActionTypes.ADD_TODO:
       return {
@@ -64,10 +71,10 @@ export function todoReducer(state = initialState, action: ActionTypes): TodoStat
           ...todo, isAttached: action.payload.isAttached,
         } : todo)),
       };
-    case TodoActionTypes.DELETE_ALL_TODOS:
+    case TodoActionTypes.DELETE_COMPLETED_TODOS:
       return {
         ...state,
-        todos: [],
+        todos: state.todos.filter((todo) => !todo.isCompleted),
       };
   }
   return state;

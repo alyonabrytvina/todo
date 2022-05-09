@@ -2,7 +2,8 @@
   width: 100%;
 
   &__searched {
-    text-shadow: 1px 1px 1px #845EC2;
+    color: #845EC2;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   }
 
 }
