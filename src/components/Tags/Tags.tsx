@@ -7,7 +7,7 @@ import {
 import Divider from '@mui/material/Divider';
 import { useDispatch } from 'react-redux';
 import { UseTypedSelector } from '../../hooks/UseTypedSelector';
-import { actionRemoveTag, actionSelectTag } from '../../store/types/tagTypes';
+import { actionRemoveTag, actionSelectTag } from '../../store/actions/tagObjAction';
 
 export const Tags: React.FC = () => {
   const dispatch = useDispatch();

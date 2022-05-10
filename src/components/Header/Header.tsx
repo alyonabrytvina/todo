@@ -5,7 +5,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { UseTypedSelector } from '../../hooks/UseTypedSelector';
 import { Search } from '../Search/Search';
-import { actionSearchTodo } from '../../store/types/todoTypes';
+import { actionSearchTodo } from '../../store/actions/todoObjAction';
 
 export const Header: React.FC = () => {
   const dispatch = useDispatch();

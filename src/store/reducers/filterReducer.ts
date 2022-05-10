@@ -1,9 +1,13 @@
-import { FilterActions, FilterActionTypes } from '../types/filterTypes';
+import { FilterActions } from '../types/filterTypes';
 
 export enum Options {
   Active ='active',
   Completed = 'completed',
   All = 'all'
+}
+
+export enum FilterActionTypes {
+  SET_SELECTED_FILTER = 'SET_SELECTED_FILTER',
 }
 
 const initialState = {

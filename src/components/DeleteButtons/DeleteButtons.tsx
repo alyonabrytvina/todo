@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, ButtonGroup } from '@mui/material';
-import { actionDeleteAllTodos, actionDeleteCompletedTodos } from '../../store/types/todoTypes';
-import { actionDeleteAllTags } from '../../store/types/tagTypes';
+import { actionDeleteAllTodos, actionDeleteCompletedTodos } from '../../store/actions/todoArrAction';
+import { actionDeleteAllTags } from '../../store/actions/tagArrAction';
 
 export const DeleteButtons: React.FC = () => {
   const dispatch = useDispatch();
@@ -12,8 +12,8 @@ export const DeleteButtons: React.FC = () => {
   };
 
   const onClickClearAll = () => {
-    dispatch(actionDeleteAllTodos([]));
-    dispatch(actionDeleteAllTags([]));
+    dispatch(actionDeleteAllTodos());
+    dispatch(actionDeleteAllTags());
   };
 
   return (

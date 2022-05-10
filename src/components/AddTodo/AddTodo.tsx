@@ -4,7 +4,7 @@ import {
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import { actionAddTodo } from '../../store/types/todoTypes';
+import { actionAddTodo } from '../../store/actions/todoObjAction';
 
 export const AddTodo: React.FC = () => {
   const dispatch = useDispatch();

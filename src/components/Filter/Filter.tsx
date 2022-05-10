@@ -3,7 +3,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { styled } from '@mui/material/styles';
 import { useDispatch } from 'react-redux';
-import { actionSetSelectedFilter } from '../../store/types/filterTypes';
+import { actionSetSelectedFilter } from '../../store/actions/filterActionCreators';
 import { UseTypedSelector } from '../../hooks/UseTypedSelector';
 import { FilterState, Options } from '../../store/reducers/filterReducer';
 

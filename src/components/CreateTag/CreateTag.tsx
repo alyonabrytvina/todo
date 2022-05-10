@@ -7,10 +7,10 @@ import Chip from '@mui/material/Chip';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { v4 as uuidv4 } from 'uuid';
 import { Todo } from '../../store/reducers/todoReducer';
-import { actionAddTag } from '../../store/types/tagTypes';
-import { actionAddTagsId } from '../../store/types/todoTypes';
+import { actionAddTag } from '../../store/actions/tagObjAction';
 import { UseTypedSelector } from '../../hooks/UseTypedSelector';
 import { Tag } from '../../store/reducers/tagReducer';
+import { actionAddTagsId } from '../../store/actions/todoObjAction';
 
 interface Props {
     todoValue: Todo

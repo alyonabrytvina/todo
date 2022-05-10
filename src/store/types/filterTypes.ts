@@ -1,9 +1,4 @@
-import { FilterState } from '../reducers/filterReducer';
+import * as actions from '../actions/filterActionCreators';
 
-export enum FilterActionTypes {
-    SET_SELECTED_FILTER = 'SET_SELECTED_FILTER',
-}
-
-export const actionSetSelectedFilter = (payload: FilterState) => ({ type: FilterActionTypes.SET_SELECTED_FILTER, payload });
-
-export type FilterActions = ReturnType<typeof actionSetSelectedFilter>
+type inferValueTypes<T> = T extends { [key: string]: infer U} ? U : never;
+export type FilterActions = ReturnType<inferValueTypes<typeof actions>>

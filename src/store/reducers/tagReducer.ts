@@ -15,13 +15,6 @@ const initialState: TagsState = {
 };
 
 export function tagReducer(state = initialState, action : TagActions): TagsState {
-  if (Array.isArray(action.payload)) {
-    return {
-      ...state,
-      tags: action.payload,
-    };
-  }
-
   switch (action.type) {
     case TagActionTypes.ADD_TAG:
       return {
@@ -39,6 +32,11 @@ export function tagReducer(state = initialState, action : TagActions): TagsState
         tags: state.tags.map((tag) => (tag.id === action.payload.id ? {
           ...tag, isSelected: action.payload.isSelected,
         } : tag)),
+      };
+    case TagActionTypes.DELETE_ALL_TAGS:
+      return {
+        ...state,
+        tags: [],
       };
   }
   return state;

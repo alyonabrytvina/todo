@@ -19,7 +19,7 @@ import { CreateTag } from '../CreateTag/CreateTag';
 import {
   actionAttachTodo, actionCompleteTodo,
   actionDeleteTodo, actionEditTodo,
-} from '../../store/types/todoTypes';
+} from '../../store/actions/todoObjAction';
 import { Todo } from '../../store/reducers/todoReducer';
 
 interface Props {
